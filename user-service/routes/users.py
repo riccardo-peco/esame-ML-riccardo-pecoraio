@@ -12,7 +12,7 @@ from typing import Any, Dict, Optional
 from flask import Blueprint, abort, current_app, jsonify, request
 
 from domain.models import Role, User
-from errors import ConflictError, ValidationError
+from errors import ConflictError, NotFoundError, ValidationError
 from pagination import paginate
 
 users_bp = Blueprint("users", __name__, url_prefix="/api/v1/users")
@@ -237,3 +237,20 @@ def list_users():
         "total": result["total"],
     }
     return jsonify(body), 200
+
+
+# ---------------------------------------------------------------------------
+# GET /api/v1/users/<user_id>
+# ---------------------------------------------------------------------------
+
+@users_bp.get("/<user_id>")
+def get_user(user_id: str):
+    """Retrieve a single user by ID.
+
+    REQ-USR-C02 §1: User exists → 200 + full User object.
+    REQ-USR-C02 §2: User not found → 404 + Error_Body code="NOT_FOUND".
+    """
+    user = current_app.repo.get_by_id(user_id)  # type: ignore[attr-defined]
+    if user is None:
+        raise NotFoundError(f"User '{user_id}' not found")
+    return jsonify(user.to_dict()), 200
