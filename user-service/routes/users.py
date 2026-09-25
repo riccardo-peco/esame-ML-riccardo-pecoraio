@@ -207,9 +207,26 @@ def list_users():
             {"field": "page_size"},
         )
 
-    # ── fetch + paginate ─────────────────────────────────────────────────────
+    # ── fetch ────────────────────────────────────────────────────────────────
     all_users = current_app.repo.list_all()  # type: ignore[attr-defined]
 
+    # ── apply role filter (REQ-USR-B03 §4, §6) ───────────────────────────────
+    role_filter = request.args.get("role")
+    if role_filter is not None:
+        if role_filter not in VALID_ROLES:
+            raise ValidationError(
+                f"role must be one of: {', '.join(sorted(VALID_ROLES))}",
+                {"field": "role", "allowed": sorted(VALID_ROLES)},
+            )
+        all_users = [u for u in all_users if u.role.value == role_filter]
+
+    # ── apply email filter (REQ-USR-B03 §5) ──────────────────────────────────
+    email_filter = request.args.get("email")
+    if email_filter is not None:
+        normalised = email_filter.lower()
+        all_users = [u for u in all_users if u.email == normalised]
+
+    # ── paginate ──────────────────────────────────────────────────────────────
     result = paginate(all_users, page, page_size)
 
     # ── serialise ────────────────────────────────────────────────────────────
