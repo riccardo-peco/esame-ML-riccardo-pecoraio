@@ -29,7 +29,8 @@ def create_repository(backend: str, data_dir: str) -> AbstractEventRepository:
         return MemoryEventRepository()
 
     if backend == "json":
-        raise NotImplementedError("json backend not yet implemented")
+        from repository.json_repo import JsonEventRepository
+        return JsonEventRepository(data_dir)
 
     if backend == "sqlite":
         raise NotImplementedError("sqlite backend not yet implemented")
