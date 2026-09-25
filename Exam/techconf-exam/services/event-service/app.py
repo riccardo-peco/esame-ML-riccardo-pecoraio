@@ -7,6 +7,7 @@ from flask import Flask, jsonify
 from werkzeug.exceptions import HTTPException
 
 import config
+from clients.user_client import UserClient
 from errors import (
     DependencyUnavailableError,
     InvalidOrganizerError,
@@ -16,11 +17,24 @@ from errors import (
     ValidationError,
     make_error_body,
 )
+from repository.factory import create_repository
+from routes.events import events_bp
 
 
 def create_app() -> Flask:
     """Application factory."""
     app = Flask(__name__)
+
+    # ------------------------------------------------------- wiring / deps
+    # Repository selected by STORAGE_BACKEND (REQ-EVT-S01); route handlers
+    # reach it via current_app.repo so they never know the concrete backend.
+    app.repo = create_repository(config.STORAGE_BACKEND, config.DATA_DIR)
+    # HTTP client used to validate organizers (REQ-EVT-B01/B02/B05); attached
+    # to the app so tests can inject a fake via app.user_client.
+    app.user_client = UserClient(config.USER_SERVICE_URL)
+
+    # Register the events blueprint (POST /api/v1/events and future routes).
+    app.register_blueprint(events_bp)
 
     # ------------------------------------------------------------------ health
     @app.get("/health")
