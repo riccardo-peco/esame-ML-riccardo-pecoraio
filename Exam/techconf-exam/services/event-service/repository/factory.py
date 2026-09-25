@@ -33,6 +33,7 @@ def create_repository(backend: str, data_dir: str) -> AbstractEventRepository:
         return JsonEventRepository(data_dir)
 
     if backend == "sqlite":
-        raise NotImplementedError("sqlite backend not yet implemented")
+        from repository.sqlite_repo import SqliteEventRepository
+        return SqliteEventRepository(data_dir)
 
     raise ValueError(f"Unknown storage backend: {backend!r}")
