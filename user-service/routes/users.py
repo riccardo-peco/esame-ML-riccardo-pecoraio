@@ -2,6 +2,7 @@
 routes/users.py — Blueprint for /api/v1/users endpoints.
 
 T-07: POST /api/v1/users (REQ-USR-C01, REQ-USR-V01)
+T-09: GET  /api/v1/users (REQ-USR-B03 — pagination)
 """
 from __future__ import annotations
 
@@ -12,6 +13,7 @@ from flask import Blueprint, abort, current_app, jsonify, request
 
 from domain.models import Role, User
 from errors import ConflictError, ValidationError
+from pagination import paginate
 
 users_bp = Blueprint("users", __name__, url_prefix="/api/v1/users")
 
@@ -141,3 +143,80 @@ def create_user():
     response.status_code = 201
     response.headers["Location"] = f"/api/v1/users/{saved.id}"
     return response
+
+
+# ---------------------------------------------------------------------------
+# GET /api/v1/users
+# ---------------------------------------------------------------------------
+
+_DEFAULT_PAGE = 1
+_DEFAULT_PAGE_SIZE = 20
+_MAX_PAGE_SIZE = 100
+
+
+def _parse_int_param(name: str, raw: Optional[str], default: int) -> int:
+    """Parse a query-string integer parameter, raising ValidationError on bad input.
+
+    Args:
+        name:    Parameter name (used in error details).
+        raw:     Raw string value from request.args, or None if absent.
+        default: Value to return when *raw* is None.
+
+    Returns:
+        Parsed integer.
+
+    Raises:
+        ValidationError: when the value is not a valid integer string.
+    """
+    if raw is None:
+        return default
+    try:
+        return int(raw)
+    except (ValueError, TypeError):
+        raise ValidationError(
+            f"{name} must be an integer",
+            {"field": name},
+        )
+
+
+@users_bp.get("")
+def list_users():
+    """List all users with pagination.
+
+    REQ-USR-B03: paginated Page response with page/page_size/total/items.
+
+    Query parameters:
+        page      (int, default 1)    — must be >= 1
+        page_size (int, default 20)   — must be 1–100
+    """
+    # ── parse pagination params ──────────────────────────────────────────────
+    page = _parse_int_param("page", request.args.get("page"), _DEFAULT_PAGE)
+    page_size = _parse_int_param(
+        "page_size", request.args.get("page_size"), _DEFAULT_PAGE_SIZE
+    )
+
+    # ── validate bounds ──────────────────────────────────────────────────────
+    if page < 1:
+        raise ValidationError(
+            "page must be >= 1",
+            {"field": "page"},
+        )
+    if not (1 <= page_size <= _MAX_PAGE_SIZE):
+        raise ValidationError(
+            f"page_size must be between 1 and {_MAX_PAGE_SIZE}",
+            {"field": "page_size"},
+        )
+
+    # ── fetch + paginate ─────────────────────────────────────────────────────
+    all_users = current_app.repo.list_all()  # type: ignore[attr-defined]
+
+    result = paginate(all_users, page, page_size)
+
+    # ── serialise ────────────────────────────────────────────────────────────
+    body = {
+        "items": [u.to_dict() for u in result["items"]],
+        "page": result["page"],
+        "page_size": result["page_size"],
+        "total": result["total"],
+    }
+    return jsonify(body), 200
