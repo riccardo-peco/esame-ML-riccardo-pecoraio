@@ -4,11 +4,16 @@ app.py — Flask application entry-point for user-service.
 from flask import Flask, jsonify
 
 import config
+from repository.factory import create_repository
 
 
 def create_app() -> Flask:
     """Application factory."""
     app = Flask(__name__)
+
+    # ------------------------------------------------ repository (REQ-USR-S01)
+    # Instantiate once at startup; route handlers access it via current_app.repo
+    app.repo = create_repository(config.STORAGE_BACKEND, config.DATA_DIR)  # type: ignore[attr-defined]
 
     # ------------------------------------------------------------------ health
     @app.get("/health")
