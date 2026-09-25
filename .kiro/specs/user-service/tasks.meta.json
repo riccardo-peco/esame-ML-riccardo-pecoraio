@@ -1,0 +1,299 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "**T-01** Scheletro del servizio: `app.py`, `config.py` (legge `PORT`/`STORAGE_BACKEND`/`DATA_DIR`), endpoint `GET /health`": [
+      {
+        "executionId": "53d7516d-68f4-470c-8e6b-436970200098",
+        "chatSessionId": "sess_8a3b5ff7-20b6-42d3-8534-bd1ebe17ff45",
+        "timestamp": 1790339107442
+      },
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339132117
+      },
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339141400
+      },
+      {
+        "executionId": "c8d829db-dc8e-4ef6-b9bd-9dd8eb095fc7",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790339193341
+      },
+      {
+        "executionId": "c8d829db-dc8e-4ef6-b9bd-9dd8eb095fc7",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790339508981
+      }
+    ],
+    "**T-02** Modello dominio `User` e interfaccia `repository/base.py` (id UUID v4, `created_at`/`updated_at`)": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339132212
+      },
+      {
+        "executionId": "d49b72f2-0087-48fb-9870-56f41ece1ff1",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790339957384
+      },
+      {
+        "executionId": "d49b72f2-0087-48fb-9870-56f41ece1ff1",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790339959986
+      }
+    ],
+    "**T-03** `repository/memory_repo.py` + `factory.py` con default `memory`": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339132283
+      },
+      {
+        "executionId": "d49b72f2-0087-48fb-9870-56f41ece1ff1",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790339962898
+      },
+      {
+        "executionId": "d49b72f2-0087-48fb-9870-56f41ece1ff1",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340037022
+      }
+    ],
+    "**T-04** `repository/json_repo.py`": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339132359
+      },
+      {
+        "executionId": "266e8410-f9e6-42cc-86ff-09c2ba0a8639",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340067854
+      },
+      {
+        "executionId": "266e8410-f9e6-42cc-86ff-09c2ba0a8639",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340147882
+      }
+    ],
+    "**T-05** `repository/sqlite_repo.py`": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339132440
+      },
+      {
+        "executionId": "0f646dc7-c78d-4dee-ad00-d12fc2b422a5",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340169700
+      },
+      {
+        "executionId": "0f646dc7-c78d-4dee-ad00-d12fc2b422a5",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340309783
+      }
+    ],
+    "**T-06** `errors.py` con formato errore comune + errorhandler Flask per `ValidationError`/`NotFoundError`/`ConflictError`, gestione `400` per JSON malformato": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339132531
+      },
+      {
+        "executionId": "bae4dd2a-5784-46fd-8ad0-19d3da4067b2",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340439091
+      },
+      {
+        "executionId": "bae4dd2a-5784-46fd-8ad0-19d3da4067b2",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340534918
+      }
+    ],
+    "**T-07** `POST /api/v1/users`: validazione campi, default `role=attendee`, `201` + `Location`": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339132600
+      },
+      {
+        "executionId": "e988822a-36a4-4273-a579-6b10fb7a39f0",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340555837
+      },
+      {
+        "executionId": "e988822a-36a4-4273-a579-6b10fb7a39f0",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340663596
+      }
+    ],
+    "**T-08** Unicità email case-insensitive e normalizzazione lowercase su creazione": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339132666
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340718171
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340768105
+      }
+    ],
+    "**T-09** `pagination.py` + `GET /api/v1/users` con `page`/`page_size` e validazione": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339132743
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340771357
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340866556
+      }
+    ],
+    "**T-10** Filtri `role` ed `email` sulla lista": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339132814
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340869830
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340920565
+      }
+    ],
+    "**T-11** `GET /api/v1/users/{id}` con `404`": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339132881
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340923836
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340972566
+      }
+    ],
+    "**T-12** `PUT`/`PATCH /api/v1/users/{id}` (validazione, unicità email, `404`, `updated_at`)": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339132952
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790340976726
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790341096038
+      }
+    ],
+    "**T-13** `DELETE /api/v1/users/{id}` con `204`/`404`": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339133028
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790341100166
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790341161702
+      }
+    ],
+    "**T-14** Unit test repository sui tre backend (`tmp_path` per json/sqlite)": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339133096
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790341171820
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790341325026
+      }
+    ],
+    "**T-15** Unit test regole di business (creazione, unicità, filtri, transizioni CRUD)": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339133171
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790341329284
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790341525706
+      }
+    ],
+    "**T-16** Un test di contratto per endpoint con `assert_matches_contract`": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339133241
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790341719638
+      }
+    ],
+    "**T-17** Verifica coverage ≥ 80% (`pytest --cov=. --cov-report=term-missing`) e sezione README per user-service (avvio, env var, comando test)": [
+      {
+        "executionId": "bcd462ac-f12d-4e6e-a663-af5c343ae072",
+        "chatSessionId": "sess_5fee2577-e1bd-4ea3-a748-9e7812fdeade",
+        "timestamp": 1790339133323
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790341724287
+      },
+      {
+        "executionId": "3abb441b-6ca3-4a62-a13b-256daf58080c",
+        "chatSessionId": "sess_1fa21f81-d2b6-4982-94ac-37a9955e89fe",
+        "timestamp": 1790341854748
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+﻿# services.yaml — manifest read by the acceptance suite.
+# Declare ONLY implemented services; others stay commented so their tests skip.
+
+services:
+  # ------------------------------- mandatory -------------------------------
+  user:
+    cwd: services/user-service
+    command: python -m app
+    health_path: /health
+
+  # event and registration are declared once implemented:
+  # event:
+  #   cwd: services/event-service
+  #   command: python -m app
+  #   health_path: /health
+
+  # registration:
+  #   cwd: services/registration-service
+  #   command: python -m app
+  #   health_path: /health

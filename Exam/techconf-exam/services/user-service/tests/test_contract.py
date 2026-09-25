@@ -1,5 +1,5 @@
-"""
-tests/test_contract.py — OpenAPI contract-conformance tests for user-service.
+﻿"""
+tests/test_contract.py â€” OpenAPI contract-conformance tests for user-service.
 
 Each test issues a real request through Flask's test client (fresh app / memory
 backend) and validates the response against the OpenAPI contract using the
@@ -39,13 +39,19 @@ import pytest
 # relative to it (robust to a moved checkout). Falls back to an absolute path
 # for the known exam layout if the relative resolution does not exist.
 # --------------------------------------------------------------------------- #
-_REPO_ROOT = Path(__file__).resolve().parents[2]
-_CONTRACTS_DIR = _REPO_ROOT / "Exam" / "techconf-exam" / "contracts"
-if not _CONTRACTS_DIR.is_dir():
-    _CONTRACTS_DIR = Path(
-        r"c:\Users\riccardo.pecoraio\Documents\esame-ML-riccardo-pecoraio"
-        r"\esame-ML-riccardo-pecoraio\Exam\techconf-exam\contracts"
-    )
+# Resolve the non-modifiable contracts dir by walking up until we find it.
+_CONTRACTS_DIR = None
+for _p in Path(__file__).resolve().parents:
+    _cand = _p / "contracts" / "validator.py"
+    if _cand.is_file():
+        _CONTRACTS_DIR = _p / "contracts"
+        break
+    _cand2 = _p / "Exam" / "techconf-exam" / "contracts" / "validator.py"
+    if _cand2.is_file():
+        _CONTRACTS_DIR = _p / "Exam" / "techconf-exam" / "contracts"
+        break
+if _CONTRACTS_DIR is None:
+    raise RuntimeError("Could not locate contracts/validator.py")
 if str(_CONTRACTS_DIR) not in sys.path:
     sys.path.insert(0, str(_CONTRACTS_DIR))
 
@@ -63,7 +69,7 @@ _SERVICE = "user-service"
 
 @pytest.fixture
 def client():
-    """Fresh test client per test (fresh in-memory repo → full isolation)."""
+    """Fresh test client per test (fresh in-memory repo â†’ full isolation)."""
     app = create_app()  # memory backend by default
     app.config.update(TESTING=True)
     return app.test_client()
@@ -100,7 +106,7 @@ def _create(client, **overrides):
 
 
 # --------------------------------------------------------------------------- #
-# Health — GET /health -> 200
+# Health â€” GET /health -> 200
 # --------------------------------------------------------------------------- #
 
 def test_health_matches_contract(client):
@@ -110,7 +116,7 @@ def test_health_matches_contract(client):
 
 
 # --------------------------------------------------------------------------- #
-# Create — POST /api/v1/users -> 201 (User) and -> 422 (Error)
+# Create â€” POST /api/v1/users -> 201 (User) and -> 422 (Error)
 # --------------------------------------------------------------------------- #
 
 def test_create_user_matches_contract(client):
@@ -128,7 +134,7 @@ def test_create_user_validation_error_matches_contract(client):
 
 
 # --------------------------------------------------------------------------- #
-# List — GET /api/v1/users -> 200 (UserPage)
+# List â€” GET /api/v1/users -> 200 (UserPage)
 # --------------------------------------------------------------------------- #
 
 def test_list_users_matches_contract(client):
@@ -140,7 +146,7 @@ def test_list_users_matches_contract(client):
 
 
 # --------------------------------------------------------------------------- #
-# Retrieve — GET /api/v1/users/{id} -> 200 (User) and -> 404 (Error)
+# Retrieve â€” GET /api/v1/users/{id} -> 200 (User) and -> 404 (Error)
 # --------------------------------------------------------------------------- #
 
 def test_get_user_matches_contract(client):
@@ -164,7 +170,7 @@ def test_get_user_not_found_matches_contract(client):
 
 
 # --------------------------------------------------------------------------- #
-# Replace — PUT /api/v1/users/{id} -> 200 (User)
+# Replace â€” PUT /api/v1/users/{id} -> 200 (User)
 # --------------------------------------------------------------------------- #
 
 def test_put_user_matches_contract(client):
@@ -185,7 +191,7 @@ def test_put_user_matches_contract(client):
 
 
 # --------------------------------------------------------------------------- #
-# Partial update — PATCH /api/v1/users/{id} -> 200 (User)
+# Partial update â€” PATCH /api/v1/users/{id} -> 200 (User)
 # --------------------------------------------------------------------------- #
 
 def test_patch_user_matches_contract(client):
@@ -201,7 +207,7 @@ def test_patch_user_matches_contract(client):
 
 
 # --------------------------------------------------------------------------- #
-# Delete — DELETE /api/v1/users/{id} -> 204 (no body)
+# Delete â€” DELETE /api/v1/users/{id} -> 204 (no body)
 # --------------------------------------------------------------------------- #
 
 def test_delete_user_matches_contract(client):
