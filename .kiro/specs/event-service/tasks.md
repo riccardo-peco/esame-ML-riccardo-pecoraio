@@ -11,37 +11,37 @@ servizio si avvia con `python -m app` (come dichiarato in `services.yaml`).
 
 ## Tasks
 
-- [ ] **T-01** Scheletro del servizio: `app.py` avviabile con `python -m app`, `config.py`
+- [x] **T-01** Scheletro del servizio: `app.py` avviabile con `python -m app`, `config.py`
   che legge `PORT`/`STORAGE_BACKEND`/`DATA_DIR`/`USER_SERVICE_URL`, endpoint `GET /health`
   → `200 {"status":"ok","service":"event-service"}`
   _Requirements: REQ-EVT-H01, REQ-EVT-CFG01_
 
-- [ ] **T-02** Modello dominio `Event` + enum `EventStatus` e interfaccia
+- [x] **T-02** Modello dominio `Event` + enum `EventStatus` e interfaccia
   `repository/base.py` (id UUID v4, `created_at`/`updated_at`, `price` a 2 decimali)
   _Requirements: REQ-EVT-C01 (p.3), REQ-EVT-V01_
 
-- [ ] **T-03** `repository/memory_repo.py` + `factory.py` con default `memory`
+- [x] **T-03** `repository/memory_repo.py` + `factory.py` con default `memory`
   _Requirements: REQ-EVT-S01_
 
-- [ ] **T-04** `repository/json_repo.py`
+- [x] **T-04** `repository/json_repo.py`
   _Requirements: REQ-EVT-S01_
 
-- [ ] **T-05** `repository/sqlite_repo.py`
+- [x] **T-05** `repository/sqlite_repo.py`
   _Requirements: REQ-EVT-S01_
 
-- [ ] **T-06** `errors.py` con formato errore comune + eccezioni di dominio + errorhandler
+- [x] **T-06** `errors.py` con formato errore comune + eccezioni di dominio + errorhandler
   Flask (mappatura 422 `VALIDATION_ERROR`/`REFERENCE_NOT_FOUND`/`INVALID_ORGANIZER`/
   `INVALID_STATUS_TRANSITION`, 404 `NOT_FOUND`, 503 `DEPENDENCY_UNAVAILABLE`), gestione
   `400` per JSON malformato e `405` per metodo non previsto
   _Requirements: REQ-EVT-OA01 (p.4), REQ-EVT-B05_
 
-- [ ] **T-07** `clients/user_client.py`: client HTTP verso user-service
+- [x] **T-07** `clients/user_client.py`: client HTTP verso user-service
   (`GET {USER_SERVICE_URL}/api/v1/users/{id}`, timeout 2s), mappatura 404 →
   `ReferenceNotFoundError`, `role!=organizer` → `InvalidOrganizerError`,
   timeout/ConnectionError/5xx → `DependencyUnavailableError`
   _Requirements: REQ-EVT-B01, REQ-EVT-B02, REQ-EVT-B05_
 
-- [ ] **T-08** `domain/service.py` + `POST /api/v1/events`: validazione campi
+- [x] **T-08** `domain/service.py` + `POST /api/v1/events`: validazione campi
   (`title` 3–120, `venue` ≤100, `city` ≤60, `capacity` 1–10000, `price` ≥0,
   `description` ≤2000), `end_date` ≥ `start_date`, default `status=draft`, validazione
   organizzatore, `201` + `Location`
