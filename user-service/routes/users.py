@@ -11,7 +11,7 @@ from typing import Any, Dict, Optional
 
 from flask import Blueprint, abort, current_app, jsonify, request
 
-from domain.models import Role, User
+from domain.models import Role, User, _utcnow
 from errors import ConflictError, NotFoundError, ValidationError
 from pagination import paginate
 
@@ -254,3 +254,135 @@ def get_user(user_id: str):
     if user is None:
         raise NotFoundError(f"User '{user_id}' not found")
     return jsonify(user.to_dict()), 200
+
+
+# ---------------------------------------------------------------------------
+# Shared helper: email uniqueness on update
+# ---------------------------------------------------------------------------
+
+def _assert_email_available(email: str, user_id: str) -> None:
+    """Reject an email that already belongs to a *different* user.
+
+    REQ-USR-B01 §4: PUT/PATCH changing the email to one that (case-insensitively)
+    already belongs to another User → 409 EMAIL_ALREADY_EXISTS.
+
+    Args:
+        email:   New email (will be lowercased for comparison).
+        user_id: Id of the user being updated (self-match is allowed).
+
+    Raises:
+        ConflictError: if another user already owns the email.
+    """
+    existing = current_app.repo.get_by_email(email.lower())  # type: ignore[attr-defined]
+    if existing is not None and existing.id != user_id:
+        raise ConflictError(f"Email '{email.lower()}' is already registered")
+
+
+# ---------------------------------------------------------------------------
+# PUT /api/v1/users/<user_id>  (full replacement)
+# ---------------------------------------------------------------------------
+
+@users_bp.put("/<user_id>")
+def replace_user(user_id: str):
+    """Fully replace a user (REQ-USR-C03).
+
+    §1: valid complete body + exists → replace all mutable fields, refresh
+        updated_at, 200 + updated User.
+    §2: not found → 404 NOT_FOUND.
+    §3: missing required field → 422 VALIDATION_ERROR.
+    §4: malformed JSON → 400.
+    REQ-USR-B01: changing email to another user's email → 409.
+    """
+    data: Optional[Dict[str, Any]] = request.get_json(force=True, silent=True)
+
+    # REQ-USR-C03 §4: malformed / non-JSON body → 400
+    if data is None:
+        abort(400)
+
+    # REQ-USR-C03 §2: user must exist
+    user = current_app.repo.get_by_id(user_id)  # type: ignore[attr-defined]
+    if user is None:
+        raise NotFoundError(f"User '{user_id}' not found")
+
+    # REQ-USR-C03 §3 + REQ-USR-V01: all required fields present and valid
+    validate_user_fields(data, require_all=True)
+
+    # REQ-USR-B01: email must not belong to a different user
+    _assert_email_available(data["email"], user_id)
+
+    # REQ-USR-C03 §1 + REQ-USR-V01 §5: replace mutable fields only; ignore
+    # server-generated fields (id, created_at, updated_at) even if supplied.
+    user.first_name = data["first_name"]
+    user.last_name = data["last_name"]
+    user.email = data["email"].lower()          # bypasses __post_init__, lowercase explicitly
+    user.company = data.get("company")           # full replacement: reset when absent
+    user.role = Role(data.get("role", Role.attendee.value))
+    user.updated_at = _utcnow()
+
+    saved = current_app.repo.update(user)        # type: ignore[attr-defined]
+    return jsonify(saved.to_dict()), 200
+
+
+# ---------------------------------------------------------------------------
+# PATCH /api/v1/users/<user_id>  (partial update)
+# ---------------------------------------------------------------------------
+
+_MUTABLE_FIELDS = ("first_name", "last_name", "email", "company", "role")
+
+
+@users_bp.patch("/<user_id>")
+def update_user(user_id: str):
+    """Partially update a user (REQ-USR-C04).
+
+    §1: partial valid body + exists → update supplied fields only, refresh
+        updated_at, 200 + updated User.
+    §2: not found → 404 NOT_FOUND.
+    §3: field violates constraints → 422 VALIDATION_ERROR.
+    §4: malformed JSON → 400.
+    §5: no recognised fields → leave unchanged, 200 + current User.
+    REQ-USR-B01: changing email to another user's email → 409.
+    """
+    data: Optional[Dict[str, Any]] = request.get_json(force=True, silent=True)
+
+    # REQ-USR-C04 §4: malformed / non-JSON body → 400
+    if data is None:
+        abort(400)
+
+    # REQ-USR-C04 §2: user must exist
+    user = current_app.repo.get_by_id(user_id)  # type: ignore[attr-defined]
+    if user is None:
+        raise NotFoundError(f"User '{user_id}' not found")
+
+    # REQ-USR-C04 §3 + REQ-USR-V01: validate only supplied fields
+    validate_user_fields(data, require_all=False)
+
+    # REQ-USR-B01: if email supplied, it must not belong to a different user
+    if "email" in data:
+        _assert_email_available(data["email"], user_id)
+
+    # Apply only recognised, supplied fields (ignore id/created_at/updated_at etc.)
+    changed = False
+    if "first_name" in data:
+        user.first_name = data["first_name"]
+        changed = True
+    if "last_name" in data:
+        user.last_name = data["last_name"]
+        changed = True
+    if "email" in data:
+        user.email = data["email"].lower()
+        changed = True
+    if "company" in data:
+        user.company = data["company"]
+        changed = True
+    if "role" in data:
+        user.role = Role(data["role"])
+        changed = True
+
+    # REQ-USR-C04 §5: no recognised fields → return current user unchanged
+    if not changed:
+        return jsonify(user.to_dict()), 200
+
+    # REQ-USR-C04 §1: refresh updated_at and persist
+    user.updated_at = _utcnow()
+    saved = current_app.repo.update(user)        # type: ignore[attr-defined]
+    return jsonify(saved.to_dict()), 200
