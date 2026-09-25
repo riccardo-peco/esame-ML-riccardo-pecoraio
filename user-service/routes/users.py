@@ -386,3 +386,22 @@ def update_user(user_id: str):
     user.updated_at = _utcnow()
     saved = current_app.repo.update(user)        # type: ignore[attr-defined]
     return jsonify(saved.to_dict()), 200
+
+
+# ---------------------------------------------------------------------------
+# DELETE /api/v1/users/<user_id>
+# ---------------------------------------------------------------------------
+
+@users_bp.delete("/<user_id>")
+def delete_user(user_id: str):
+    """Delete a user by ID (REQ-USR-C05).
+
+    §1: User exists → remove from Repository, respond 204 with no body.
+    §2: User not found → 404 + Error_Body code="NOT_FOUND".
+    §3: after deletion, a subsequent GET for the same id returns 404 (guaranteed
+        because the record is removed from the Repository).
+    """
+    deleted = current_app.repo.delete(user_id)  # type: ignore[attr-defined]
+    if not deleted:
+        raise NotFoundError(f"User '{user_id}' not found")
+    return "", 204
