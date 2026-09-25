@@ -11,7 +11,7 @@ from typing import Any, Dict, Optional
 from flask import Blueprint, abort, current_app, jsonify, request
 
 from domain.models import Role, User
-from errors import ValidationError
+from errors import ConflictError, ValidationError
 
 users_bp = Blueprint("users", __name__, url_prefix="/api/v1/users")
 
@@ -129,7 +129,11 @@ def create_user():
         role=role,
     )
 
-    # Persist (email uniqueness check added in T-08)
+    # REQ-USR-B01: reject duplicate emails (case-insensitive)
+    existing = current_app.repo.get_by_email(user.email)
+    if existing is not None:
+        raise ConflictError(f"Email '{user.email}' is already registered")
+
     saved = current_app.repo.add(user)  # type: ignore[attr-defined]
 
     # REQ-USR-C01 §1,§2,§3: 201 + Location + full body
