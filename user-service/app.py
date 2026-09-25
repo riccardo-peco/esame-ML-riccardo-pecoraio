@@ -7,6 +7,7 @@ from werkzeug.exceptions import HTTPException
 import config
 from errors import ConflictError, NotFoundError, ValidationError, make_error_body
 from repository.factory import create_repository
+from routes.users import users_bp
 
 
 def create_app() -> Flask:
@@ -16,6 +17,9 @@ def create_app() -> Flask:
     # ------------------------------------------------ repository (REQ-USR-S01)
     # Instantiate once at startup; route handlers access it via current_app.repo
     app.repo = create_repository(config.STORAGE_BACKEND, config.DATA_DIR)  # type: ignore[attr-defined]
+
+    # ----------------------------------------------- blueprints (REQ-USR-C01)
+    app.register_blueprint(users_bp)
 
     # ------------------------------------------------------------------ health
     @app.get("/health")
